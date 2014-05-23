@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application level Controller
  *
@@ -18,7 +19,6 @@
  * @since         CakePHP(tm) v 0.2.9
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-
 App::uses('Controller', 'Controller');
 
 /**
@@ -31,4 +31,29 @@ App::uses('Controller', 'Controller');
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
+    public $webroot;
+    public $currentUser;
+    public $currentTime;
+    public $controller;
+    public $action;
+    var $helpers = array('Html');
+    public static $uploadPath = 'img/uploads/';
+    public static $imgExts = array('jpg', 'png');
+    
+    
+    function beforeRender() {
+        $this->webroot = Router::url('/', true);
+        $this->set('webroot', $this->webroot);
+        $this->currentUser = $this->Session->read('Auth.User');
+        $this->set('currentUser', $this->currentUser);
+        $this->currentTime = gmdate('Y-m-d H:i:s');
+        $this->set('currentTime', $this->currentTime);
+        $this->controller = $this->params['controller'];
+        $this->set('controller', $this->params['controller']);
+        $this->action = $this->params['action'];
+        $this->set('action', $this->params['action']);
+        if ($this->name == 'CakeError') {
+            $this->layout = 'error';
+        }
+    }
 }
